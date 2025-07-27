@@ -1,12 +1,9 @@
 package com.flashbackmc.statistics;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class Player {
-
-    HashMap<UUID, Player> playerMap = new PlayerMap().getPlayerMap();
 
     private final UUID uuid;
     private final int blocksBroken;
