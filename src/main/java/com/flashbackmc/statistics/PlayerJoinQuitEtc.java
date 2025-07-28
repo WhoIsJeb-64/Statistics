@@ -1,6 +1,5 @@
 package com.flashbackmc.statistics;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -34,11 +33,11 @@ public class PlayerJoinQuitEtc implements Listener {
                 InputStream inputStream = Files.newInputStream(Paths.get(datafile.getPath()));
                 Yaml yaml = new Yaml();
                 Map<String, Object> data = (Map<String, Object>) yaml.load(inputStream);
-                Player player = new Player(data);
+                Player player = new Player(uuid, data);
                 playerMap.put(uuid, player);
             }
 
-            Player player = new Player(uuid);
+            Player player = new Player(uuid, event.getPlayer().getName());
             playerMap.put(uuid, player);
         }
     }
@@ -49,6 +48,7 @@ public class PlayerJoinQuitEtc implements Listener {
 
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("uuid", player.getUuid().toString());
+        data.put("name", player.getName());
         data.put("blocksBroken", player.getBlocksBroken());
         data.put("blocksPlaced", player.getBlocksPlaced());
 
