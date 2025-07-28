@@ -37,13 +37,10 @@ public class PlayerJoinQuitEtc implements Listener {
                 Map<String, Object> data = (Map<String, Object>) yaml.load(inputStream);
                 Player player = new Player(uuid, data);
                 playerMap.put(uuid, player);
+            } else {
+                Player player = new Player(uuid, event.getPlayer().getName());
+                playerMap.put(uuid, player);
             }
-
-            Player player = new Player(uuid, event.getPlayer().getName());
-            playerMap.put(uuid, player);
-        } else {
-            Player player = playerMap.get(uuid);
-            player.resetSessionStart();
         }
     }
 

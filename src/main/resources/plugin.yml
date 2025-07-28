@@ -11,4 +11,3 @@ commands:
 permissions:
   statistics.stats:
     description: Grants access to /stats.
-    default: not op

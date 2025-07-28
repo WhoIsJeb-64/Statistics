@@ -1,5 +1,6 @@
 package com.flashbackmc.statistics;
 
+import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.UUID;
 
@@ -12,7 +13,7 @@ public class Player {
     private int blocksBroken;
     private int blocksPlaced;
 
-    private long sessionStart;
+    private long sessionStart = 0;
     private long sessionLength;
 
     public Player(UUID uuid, String name) {
@@ -31,7 +32,7 @@ public class Player {
         this.uuid = uuid;
         this.name = datafile.get("name").toString();
 
-        this.playtime = (long) datafile.get("playtime");
+        this.playtime = (int) datafile.get("playtime");
         this.blocksBroken = (int) datafile.get("blocksBroken");
         this.blocksPlaced = (int) datafile.get("blocksPlaced");
 
@@ -59,6 +60,11 @@ public class Player {
         return this.blocksPlaced;
     }
 
+    public String formatNumber(int num) {
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        return formatter.format(num);
+    }
+
     public void increaseBlocksPlaced() {
         this.blocksPlaced = this.blocksPlaced + 1;
     }
@@ -70,7 +76,21 @@ public class Player {
     public void updatePlaytime() {
         this.sessionLength = System.currentTimeMillis() - this.sessionStart;
         this.playtime = this.playtime + this.sessionLength;
-        this.sessionLength = 0;
+        this.sessionStart = System.currentTimeMillis();
+    }
+
+    public String formattedPlaytime(Long playtime) {
+        //Each of the next 4 lines determines how many of the unit remain after as many of the next are taken out.
+        long seconds = (playtime / 1000) % 60;
+        long minutes = (playtime / (1000 * 60)) % 60;
+        long hours = (playtime / (1000 * 60 * 60)) % 24;
+        long days = (playtime / (1000 * 60 * 60 * 24)) % 7;
+
+        //Seconds stop being displayed to players who have over 1 day of playtime
+        if (playtime >= 86400000) {
+            return String.format("%01dd %02dh %02dm", days, hours, minutes);
+        }
+        return String.format("%02dh %02dm %02ds", hours, minutes, seconds);
     }
 
     public void resetSessionStart() {
