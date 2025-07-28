@@ -1,5 +1,7 @@
 package com.flashbackmc.statistics;
 
+import com.flashbackmc.statistics.commands.StatsCommand;
+import com.flashbackmc.statistics.listeners.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashMap;
 import java.util.UUID;
@@ -18,6 +20,7 @@ public class Statistics extends JavaPlugin {
         playerMap = new HashMap<>();
 
         registerListeners();
+        getCommand("stats").setExecutor(new StatsCommand(this));
 
         log.info("Statistics has loaded!");
     }
@@ -29,5 +32,6 @@ public class Statistics extends JavaPlugin {
 
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new PlayerJoinQuitEtc(getLogger(), this), this);
+        getServer().getPluginManager().registerEvents(new BlockBreakPlace(getLogger(), this), this);
     }
 }

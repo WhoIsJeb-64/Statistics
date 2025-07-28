@@ -4,3 +4,11 @@ author: WhoIsJeb
 version: 1.0-SNAPSHOT
 api-version: 1.5.2-R1.0
 commands:
+  stats:
+    description: Lists the stats of the specified player.
+    aliases: [st]
+    permission: statistics.stats
+permissions:
+  statistics.stats:
+    description: Grants access to /stats.
+    default: not op

@@ -1,5 +1,7 @@
-package com.flashbackmc.statistics;
+package com.flashbackmc.statistics.listeners;
 
+import com.flashbackmc.statistics.Player;
+import com.flashbackmc.statistics.Statistics;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -39,16 +41,23 @@ public class PlayerJoinQuitEtc implements Listener {
 
             Player player = new Player(uuid, event.getPlayer().getName());
             playerMap.put(uuid, player);
+        } else {
+            Player player = playerMap.get(uuid);
+            player.resetSessionStart();
         }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerQuit(final PlayerQuitEvent event) throws IOException {
-        Player player = playerMap.get(event.getPlayer().getUniqueId());
+        UUID uuid = event.getPlayer().getUniqueId();
+        Player player = playerMap.get(uuid);
+        player.updatePlaytime();
 
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("uuid", player.getUuid().toString());
         data.put("name", player.getName());
+
+        data.put("playtime", player.getPlaytime());
         data.put("blocksBroken", player.getBlocksBroken());
         data.put("blocksPlaced", player.getBlocksPlaced());
 
