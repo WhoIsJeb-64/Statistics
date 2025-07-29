@@ -33,6 +33,7 @@ public class StatsCommand implements CommandExecutor {
 
         commandSender.sendMessage("§7» §4Playtime:§c " + player.formattedPlaytime(player.getPlaytime()));
         commandSender.sendMessage("§7» §6Blocks broken/placed:§e " + player.formatNumber(player.getBlocksBroken()) + " §6/§e " + player.formatNumber(player.getBlocksPlaced()));
+        commandSender.sendMessage("§7» §2Deaths:§a " + player.formatNumber(player.getDeaths()));
         return true;
     }
 }

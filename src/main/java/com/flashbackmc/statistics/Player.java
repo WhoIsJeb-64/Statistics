@@ -12,6 +12,7 @@ public class Player {
     private long playtime;
     private int blocksBroken;
     private int blocksPlaced;
+    private int deaths;
 
     private long sessionStart = 0;
     private long sessionLength;
@@ -23,6 +24,7 @@ public class Player {
         this.playtime = 0;
         this.blocksBroken = 0;
         this.blocksPlaced = 0;
+        this.deaths = 0;
 
         this.sessionStart = System.currentTimeMillis();
         this.sessionLength = 0;
@@ -32,9 +34,10 @@ public class Player {
         this.uuid = uuid;
         this.name = datafile.get("name").toString();
 
-        this.playtime = (int) datafile.get("playtime");
+        this.playtime = (Long) datafile.get("playtime");
         this.blocksBroken = (int) datafile.get("blocksBroken");
         this.blocksPlaced = (int) datafile.get("blocksPlaced");
+        this.deaths = (int) datafile.get("deaths");
 
         this.sessionStart = System.currentTimeMillis();
         this.sessionLength = 0;
@@ -69,6 +72,14 @@ public class Player {
         this.blocksPlaced = this.blocksPlaced + 1;
     }
 
+    public int getDeaths() {
+        return this.deaths;
+    }
+
+    public void increaseDeaths() {
+        this.deaths = this.deaths + 1;
+    }
+
     public long getPlaytime() {
         return playtime;
     }
@@ -84,7 +95,7 @@ public class Player {
         long seconds = (playtime / 1000) % 60;
         long minutes = (playtime / (1000 * 60)) % 60;
         long hours = (playtime / (1000 * 60 * 60)) % 24;
-        long days = (playtime / (1000 * 60 * 60 * 24)) % 7;
+        long days = (playtime / (1000 * 60 * 60 * 24));
 
         //Seconds stop being displayed to players who have over 1 day of playtime
         if (playtime >= 86400000) {

@@ -57,6 +57,7 @@ public class PlayerJoinQuitEtc implements Listener {
         data.put("playtime", player.getPlaytime());
         data.put("blocksBroken", player.getBlocksBroken());
         data.put("blocksPlaced", player.getBlocksPlaced());
+        data.put("deaths", player.getDeaths());
 
         File datafile = new File(plugin.getDataFolder().toString() + "/userdata/" + player.getUuid().toString() + ".yml");
         datafile.getParentFile().mkdirs();

@@ -33,5 +33,6 @@ public class Statistics extends JavaPlugin {
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new PlayerJoinQuitEtc(getLogger(), this), this);
         getServer().getPluginManager().registerEvents(new BlockBreakPlace(getLogger(), this), this);
+        getServer().getPluginManager().registerEvents(new PlayerDeath(getLogger(), this), this);
     }
 }
