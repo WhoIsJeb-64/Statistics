@@ -1,0 +1,17 @@
+#############################################################
+# +-------------------------------------------------------+ #
+# |                Statistics Rank Ladder                 | #
+# +-------------------------------------------------------+ #
+#############################################################
+
+# Make sure that the rank names here are EXACTLY the same as the actual group name.
+# The values to the right are milliseconds, 1/100th of a second.
+# When a player reaches a group's specified playtime, they will be promoted to that group.
+
+# Do not include the default/starter rank
+
+Topaz: 54000000      #15h
+Sapphire: 144000000  #40h
+Amethyst: 360000000  #100h
+Emerald: 1080000000  #300h
+Diamond: 2160000000  #600h

@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Logger;
 import static com.flashbackmc.statistics.Statistics.playerMap;
+import static com.flashbackmc.statistics.Statistics.rankLadder;
 
 public class PlayerJoinQuitEtc implements Listener {
 
@@ -41,6 +42,9 @@ public class PlayerJoinQuitEtc implements Listener {
                 Player player = new Player(uuid, event.getPlayer().getName());
                 playerMap.put(uuid, player);
             }
+        }
+        if (rankLadder.isEmpty()) {
+            event.getPlayer().sendMessage("§cRank ladder failed to populate!");
         }
     }
 

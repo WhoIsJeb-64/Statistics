@@ -1,8 +1,13 @@
 package com.flashbackmc.statistics;
 
+import org.anjocaido.groupmanager.data.Group;
+import org.anjocaido.groupmanager.data.User;
+import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
+import org.bukkit.Bukkit;
 import java.text.DecimalFormat;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
+import static com.flashbackmc.statistics.Statistics.rankLadder;
 
 public class Player {
 
@@ -88,6 +93,21 @@ public class Player {
         this.sessionLength = System.currentTimeMillis() - this.sessionStart;
         this.playtime = this.playtime + this.sessionLength;
         this.sessionStart = System.currentTimeMillis();
+
+        ArrayList<String> rankList = new ArrayList<>(rankLadder.keySet());
+        int rankNum = 0;
+        for (Long value : rankLadder.values()) {
+            if (this.playtime >= value) {
+                rankNum++;
+            }
+        }
+        org.bukkit.entity.Player player = Bukkit.getPlayer(this.name);
+        WorldDataHolder wdh = new WorldDataHolder("world");
+        Group defaultGroup = new Group("Default");
+        wdh.setDefaultGroup(defaultGroup);
+        User user = new User(wdh, this.name);
+        Group newGroup = new Group(rankList.get(rankNum));
+        user.setGroup(newGroup);
     }
 
     public String formattedPlaytime(Long playtime) {
