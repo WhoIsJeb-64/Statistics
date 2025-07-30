@@ -7,7 +7,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -50,10 +49,10 @@ public class Statistics extends JavaPlugin {
     }
 
     private void initializeRankLadder() {
-        Map<String, Object> rankList = new HashMap<>();
-        rankList.putAll(ranksConfig.getValues(false));
-        for (Map.Entry<String, Object> entry : rankList.entrySet()) {
-            rankLadder.put(entry.getKey(), (Long) entry.getValue());
-        }
+        rankLadder.put("Topaz", 54000000L);
+        rankLadder.put("Sapphire", 144000000L);
+        rankLadder.put("Amethyst", 360000000L);
+        rankLadder.put("Emerald", 1080000000L);
+        rankLadder.put("Diamond", 2160000000L);
     }
 }
