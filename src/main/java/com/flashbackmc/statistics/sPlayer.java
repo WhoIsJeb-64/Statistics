@@ -1,47 +1,57 @@
 package com.flashbackmc.statistics;
 
-import org.anjocaido.groupmanager.data.Group;
-import org.anjocaido.groupmanager.data.User;
-import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import org.bukkit.Bukkit;
+import org.yaml.snakeyaml.Yaml;
+
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
+import static com.flashbackmc.statistics.Statistics.*;
 
-import static com.flashbackmc.statistics.Statistics.rankLadder;
-
-public class Player {
+public class sPlayer {
 
     private final UUID uuid;
     private final String name;
+    private String group;
 
     private long playtime;
     private int blocksBroken;
     private int blocksPlaced;
+    private int xpGained;
     private int deaths;
 
-    private long sessionStart = 0;
+    private long sessionStart;
     private long sessionLength;
 
-    public Player(UUID uuid, String name) {
+    public sPlayer(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;
+        this.group = "Silver";
 
         this.playtime = 0;
         this.blocksBroken = 0;
         this.blocksPlaced = 0;
+        this.xpGained = 0;
         this.deaths = 0;
 
         this.sessionStart = System.currentTimeMillis();
         this.sessionLength = 0;
     }
 
-    public Player(UUID uuid, Map<String, Object> datafile) {
+    public sPlayer(UUID uuid, Map<String, Object> datafile) {
         this.uuid = uuid;
         this.name = datafile.get("name").toString();
+        this.group = datafile.get("group").toString();
 
-        this.playtime = (Long) datafile.get("playtime");
+        try {
+            this.playtime = (int) datafile.get("playtime");
+        } catch(Exception e) { //Java is weird
+            this.playtime = (long) datafile.get("playtime");
+        }
+
         this.blocksBroken = (int) datafile.get("blocksBroken");
         this.blocksPlaced = (int) datafile.get("blocksPlaced");
+        this.xpGained = (int) datafile.get("xpGained");
         this.deaths = (int) datafile.get("deaths");
 
         this.sessionStart = System.currentTimeMillis();
@@ -54,6 +64,10 @@ public class Player {
 
     public String getName() {
         return this.name;
+    }
+
+    public String getGroup() {
+        return this.group;
     }
 
     public int getBlocksBroken() {
@@ -77,6 +91,14 @@ public class Player {
         this.blocksPlaced = this.blocksPlaced + 1;
     }
 
+    public int getXpGained() {
+        return this.xpGained;
+    }
+
+    public void increaseXpGained(int difference) {
+        this.xpGained = this.xpGained + difference;
+    }
+
     public int getDeaths() {
         return this.deaths;
     }
@@ -93,21 +115,14 @@ public class Player {
         this.sessionLength = System.currentTimeMillis() - this.sessionStart;
         this.playtime = this.playtime + this.sessionLength;
         this.sessionStart = System.currentTimeMillis();
+    }
 
-        ArrayList<String> rankList = new ArrayList<>(rankLadder.keySet());
+    public void updateRank() {
         int rankNum = 0;
-        for (Long value : rankLadder.values()) {
-            if (this.playtime >= value) {
-                rankNum++;
-            }
-        }
-        org.bukkit.entity.Player player = Bukkit.getPlayer(this.name);
-        WorldDataHolder wdh = new WorldDataHolder("world");
-        Group defaultGroup = new Group("Default");
-        wdh.setDefaultGroup(defaultGroup);
-        User user = new User(wdh, this.name);
-        Group newGroup = new Group(rankList.get(rankNum));
-        user.setGroup(newGroup);
+        for (Long key : rankTimes) {if (this.playtime >= key) {rankNum++;}}
+        if (this.group.equals(rankNames.get(rankNum))) {return;}
+        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "manuadd " + this.name + " " + rankNames.get(rankNum));
+        this.group = rankNames.get(rankNum);
     }
 
     public String formattedPlaytime(Long playtime) {
@@ -124,7 +139,23 @@ public class Player {
         return String.format("%02dh %02dm %02ds", hours, minutes, seconds);
     }
 
-    public void resetSessionStart() {
-        this.sessionStart = System.currentTimeMillis();
+    public void save(Statistics plugin) throws FileNotFoundException {
+        Map<String, Object> data = new LinkedHashMap<>();
+
+        data.put("uuid", this.getUuid().toString());
+        data.put("name", this.getName());
+        data.put("group", this.group);
+        data.put("playtime", this.getPlaytime());
+        data.put("blocksBroken", this.getBlocksBroken());
+        data.put("blocksPlaced", this.getBlocksPlaced());
+        data.put("xpGained", this.getXpGained());
+        data.put("deaths", this.getDeaths());
+
+        File datafile = new File(plugin.getDataFolder().toString() + "/userdata/" + this.getUuid().toString() + ".yml");
+        datafile.getParentFile().mkdirs();
+        PrintWriter writer = new PrintWriter(datafile);
+        Yaml yaml = new Yaml();
+        yaml.dump(data, writer);
+        writer.close();
     }
 }

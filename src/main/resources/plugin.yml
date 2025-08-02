@@ -3,6 +3,7 @@ main: com.flashbackmc.statistics.Statistics
 author: WhoIsJeb
 version: 1.0-SNAPSHOT
 api-version: 1.5.2-R1.0
+depend: [GroupManager]
 commands:
   stats:
     description: Lists the stats of the specified player.

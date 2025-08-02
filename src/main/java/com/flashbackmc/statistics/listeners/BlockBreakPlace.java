@@ -1,6 +1,6 @@
 package com.flashbackmc.statistics.listeners;
 
-import com.flashbackmc.statistics.Player;
+import com.flashbackmc.statistics.sPlayer;
 import com.flashbackmc.statistics.Statistics;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,14 +24,14 @@ public class BlockBreakPlace implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockBreak(final BlockBreakEvent event) {
         UUID uuid = event.getPlayer().getUniqueId();
-        Player player = playerMap.get(uuid);
-        player.increaseBlocksBroken();
+        sPlayer sPlayer = playerMap.get(uuid);
+        sPlayer.increaseBlocksBroken();
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockPlace(final BlockPlaceEvent event) {
         UUID uuid = event.getPlayer().getUniqueId();
-        Player player = playerMap.get(uuid);
-        player.increaseBlocksPlaced();
+        sPlayer sPlayer = playerMap.get(uuid);
+        sPlayer.increaseBlocksPlaced();
     }
 }

@@ -1,6 +1,7 @@
 package com.flashbackmc.statistics.commands;
 
 import com.flashbackmc.statistics.Statistics;
+import com.flashbackmc.statistics.sPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,14 +27,16 @@ public class StatsCommand implements CommandExecutor {
             return true;
         }
 
-        Player user = commandSender.getServer().getPlayer(commandSender.getName());
-        UUID uuid = user.getUniqueId();
-        com.flashbackmc.statistics.Player player = playerMap.get(uuid);
-        player.updatePlaytime();
+        Player player = commandSender.getServer().getPlayer(commandSender.getName());
+        UUID uuid = player.getUniqueId();
+        sPlayer sPlayer = playerMap.get(uuid);
+        sPlayer.updatePlaytime();
+        sPlayer.updateRank();
 
-        commandSender.sendMessage("§7» §4Playtime:§c " + player.formattedPlaytime(player.getPlaytime()));
-        commandSender.sendMessage("§7» §6Blocks broken/placed:§e " + player.formatNumber(player.getBlocksBroken()) + " §6/§e " + player.formatNumber(player.getBlocksPlaced()));
-        commandSender.sendMessage("§7» §2Deaths:§a " + player.formatNumber(player.getDeaths()));
+        commandSender.sendMessage("» §7Playtime:§c " + sPlayer.formattedPlaytime(sPlayer.getPlaytime()));
+        commandSender.sendMessage("» §7Blocks broken/placed:§e " + sPlayer.formatNumber(sPlayer.getBlocksBroken()) + " §7/§e " + sPlayer.formatNumber(sPlayer.getBlocksPlaced()));
+        commandSender.sendMessage("» §7Exp gained:§a " + sPlayer.formatNumber(sPlayer.getXpGained()));
+        commandSender.sendMessage("» §7Deaths:§3 " + sPlayer.formatNumber(sPlayer.getDeaths()));
         return true;
     }
 }
