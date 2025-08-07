@@ -33,10 +33,10 @@ public class StatsCommand implements CommandExecutor {
         sPlayer.updatePlaytime();
         sPlayer.updateRank();
 
-        commandSender.sendMessage("» §7Playtime:§c " + sPlayer.formattedPlaytime(sPlayer.getPlaytime()));
-        commandSender.sendMessage("» §7Blocks broken/placed:§e " + sPlayer.formatNumber(sPlayer.getBlocksBroken()) + " §7/§e " + sPlayer.formatNumber(sPlayer.getBlocksPlaced()));
-        commandSender.sendMessage("» §7Exp gained:§a " + sPlayer.formatNumber(sPlayer.getXpGained()));
-        commandSender.sendMessage("» §7Deaths:§3 " + sPlayer.formatNumber(sPlayer.getDeaths()));
+        commandSender.sendMessage("» §7Playtime:§c " + sPlayer.formattedPlaytime());
+        commandSender.sendMessage("» §7Blocks broken/placed:§e " + sPlayer.decFormat(sPlayer.getBlocksBroken()) + " §7/§e " + sPlayer.decFormat(sPlayer.getBlocksPlaced()));
+        commandSender.sendMessage("» §7Exp gained:§a " + sPlayer.decFormat(sPlayer.getXpGained()));
+        commandSender.sendMessage("» §7Deaths:§3 " + sPlayer.decFormat(sPlayer.getDeaths()));
         return true;
     }
 }

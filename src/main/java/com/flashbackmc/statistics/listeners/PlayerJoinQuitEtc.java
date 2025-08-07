@@ -35,10 +35,10 @@ public class PlayerJoinQuitEtc implements Listener {
                 InputStream inputStream = Files.newInputStream(Paths.get(datafile.getPath()));
                 Yaml yaml = new Yaml();
                 Map<String, Object> data = (Map<String, Object>) yaml.load(inputStream);
-                sPlayer sPlayer = new sPlayer(uuid, data);
+                sPlayer sPlayer = new sPlayer(uuid, data, plugin);
                 playerMap.put(uuid, sPlayer);
             } else {
-                sPlayer sPlayer = new sPlayer(uuid, event.getPlayer().getName());
+                sPlayer sPlayer = new sPlayer(uuid, event.getPlayer().getName(), plugin);
                 playerMap.put(uuid, sPlayer);
             }
         }

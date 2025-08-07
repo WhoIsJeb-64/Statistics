@@ -2,13 +2,12 @@ package com.flashbackmc.statistics;
 
 import org.bukkit.Bukkit;
 import org.yaml.snakeyaml.Yaml;
-
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
-import static com.flashbackmc.statistics.Statistics.*;
 
 public class sPlayer {
+    private Statistics plugin;
 
     private final UUID uuid;
     private final String name;
@@ -23,7 +22,8 @@ public class sPlayer {
     private long sessionStart;
     private long sessionLength;
 
-    public sPlayer(UUID uuid, String name) {
+    public sPlayer(UUID uuid, String name, Statistics plugin) {
+        this.plugin = plugin;
         this.uuid = uuid;
         this.name = name;
         this.group = "Silver";
@@ -38,7 +38,8 @@ public class sPlayer {
         this.sessionLength = 0;
     }
 
-    public sPlayer(UUID uuid, Map<String, Object> datafile) {
+    public sPlayer(UUID uuid, Map<String, Object> datafile, Statistics plugin) {
+        this.plugin = plugin;
         this.uuid = uuid;
         this.name = datafile.get("name").toString();
         this.group = datafile.get("group").toString();
@@ -56,6 +57,12 @@ public class sPlayer {
 
         this.sessionStart = System.currentTimeMillis();
         this.sessionLength = 0;
+    }
+
+    public abstract static class Statistic {
+        abstract void get();
+        abstract void increase();
+        abstract void format();
     }
 
     public UUID getUuid() {
@@ -82,7 +89,7 @@ public class sPlayer {
         return this.blocksPlaced;
     }
 
-    public String formatNumber(int num) {
+    public String decFormat(int num) {
         DecimalFormat formatter = new DecimalFormat("#,###");
         return formatter.format(num);
     }
@@ -119,21 +126,24 @@ public class sPlayer {
 
     public void updateRank() {
         int rankNum = 0;
-        for (Long key : rankTimes) {if (this.playtime >= key) {rankNum++;}}
-        if (this.group.equals(rankNames.get(rankNum))) {return;}
-        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "manuadd " + this.name + " " + rankNames.get(rankNum));
-        this.group = rankNames.get(rankNum);
+        for (Long value : plugin.getRankLadder().values()) {
+            if (this.playtime > value) {
+                rankNum++;
+            }
+        }
+        this.group = plugin.getRanks().get(rankNum);
+        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "manuadd " + this.name + " " + this.group);
     }
 
-    public String formattedPlaytime(Long playtime) {
+    public String formattedPlaytime() {
         //Each of the next 4 lines determines how many of the unit remain after as many of the next are taken out.
-        long seconds = (playtime / 1000) % 60;
-        long minutes = (playtime / (1000 * 60)) % 60;
-        long hours = (playtime / (1000 * 60 * 60)) % 24;
-        long days = (playtime / (1000 * 60 * 60 * 24));
+        long seconds = (this.playtime / 1000) % 60;
+        long minutes = (this.playtime / (1000 * 60)) % 60;
+        long hours = (this.playtime / (1000 * 60 * 60)) % 24;
+        long days = (this.playtime / (1000 * 60 * 60 * 24));
 
         //Seconds stop being displayed to players who have over 1 day of playtime
-        if (playtime >= 86400000) {
+        if (this.playtime >= 86400000) {
             return String.format("%01dd %02dh %02dm", days, hours, minutes);
         }
         return String.format("%02dh %02dm %02ds", hours, minutes, seconds);

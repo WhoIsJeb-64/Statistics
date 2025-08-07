@@ -1,0 +1,13 @@
+##########################################
+#        Statistics Configuration        #
+##########################################
+
+
+# Format: Exact-Groupname: Hours of playtime required
+ranks:
+  Silver: 0
+  Topaz: 15
+  Sapphire: 40
+  Amethyst: 100
+  Emerald: 300
+  Diamond: 600

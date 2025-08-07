@@ -3,12 +3,17 @@ main: com.flashbackmc.statistics.Statistics
 author: WhoIsJeb
 version: 1.0-SNAPSHOT
 api-version: 1.5.2-R1.0
-depend: [GroupManager]
 commands:
   stats:
     description: Lists the stats of the specified player.
     aliases: [st]
     permission: statistics.stats
+  statsadmin:
+    description: A utility command meant for administrators.
+    aliases: [stadmin, sta]
+    permission: statistics.statsadmin
 permissions:
   statistics.stats:
     description: Grants access to /stats.
+  statistics.statsadmin:
+    description: Grants access to /statsadmin.
