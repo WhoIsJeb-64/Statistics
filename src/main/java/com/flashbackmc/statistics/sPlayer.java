@@ -59,22 +59,12 @@ public class sPlayer {
         this.sessionLength = 0;
     }
 
-    public abstract static class Statistic {
-        abstract void get();
-        abstract void increase();
-        abstract void format();
-    }
-
     public UUID getUuid() {
         return this.uuid;
     }
 
     public String getName() {
         return this.name;
-    }
-
-    public String getGroup() {
-        return this.group;
     }
 
     public int getBlocksBroken() {
