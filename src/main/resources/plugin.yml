@@ -2,18 +2,23 @@ name: Statistics
 main: com.flashbackmc.statistics.Statistics
 author: WhoIsJeb
 version: 1.0-SNAPSHOT
-api-version: 1.5.2-R1.0
+api-version: 1.8.8-R0.1-SNAPSHOT
 commands:
   stats:
     description: Lists the stats of the specified player.
+    usage: /<command>
     aliases: [st]
     permission: statistics.stats
+    permission-message: §cYou are not authorized to execute /stats.
   statsadmin:
     description: A utility command meant for administrators.
+    usage: /<command>
     aliases: [stadmin, sta]
     permission: statistics.statsadmin
 permissions:
   statistics.stats:
     description: Grants access to /stats.
+    default: true
   statistics.statsadmin:
     description: Grants access to /statsadmin.
+    default: false

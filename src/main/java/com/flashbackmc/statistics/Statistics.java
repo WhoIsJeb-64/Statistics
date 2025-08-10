@@ -12,25 +12,18 @@ import java.util.logging.Logger;
 public class Statistics extends JavaPlugin {
     private JavaPlugin plugin;
     private Logger log;
-    private File configFile;
-    private FileConfiguration config;
     public static HashMap<UUID, sPlayer> playerMap;
-    private HashMap<String, Long> rankLadder;
+    private LinkedHashMap<String, Long> rankLadder;
 
     @Override
     public void onEnable() {
         plugin = this;
         log = this.getServer().getLogger();
-        configFile = new File(getDataFolder(), "config.yml");
-        config = YamlConfiguration.loadConfiguration(configFile);
 
-        if (!configFile.exists()) {
-            saveResource("config.yml", false);
-            log.info("Created Statistics's config!");
-        }
+        setupConfig();
 
         playerMap = new HashMap<>();
-        rankLadder = new HashMap<>();
+        rankLadder = new LinkedHashMap<>();
         initRanks();
 
         registerListeners();
@@ -38,11 +31,17 @@ public class Statistics extends JavaPlugin {
         getCommand("statsadmin").setExecutor(new StatsAdminCommand(this));
 
         log.info("Statistics has loaded!");
+        log.info("Ranks: " + getRanks());
     }
 
     @Override
     public void onDisable() {
         log.info("Statistics has unloaded!");
+    }
+
+    private void setupConfig() {
+        this.getConfig().options().copyDefaults();
+        this.saveDefaultConfig();
     }
 
     private void registerListeners() {
@@ -53,20 +52,16 @@ public class Statistics extends JavaPlugin {
     }
 
     private void initRanks() {
-        for (String key : config.getConfigurationSection("ranks.").getKeys(false)) {
-            rankLadder.put(key, (config.getLong("ranks." + key) / 3600000));
+        for (String rank : getConfig().getConfigurationSection("ranks.").getKeys(false)) {
+            rankLadder.put(rank, (getConfig().getLong("ranks." + rank) * 3600000));
         }
     }
 
-    public FileConfiguration getConfig() {
-        return config;
-    }
-
-    public HashMap<String, Long> getRankLadder() {
+    public LinkedHashMap<String, Long> getRankLadder() {
         return rankLadder;
     }
 
     public ArrayList<String> getRanks() {
-        return new ArrayList<>(rankLadder.keySet());
+        return new ArrayList<>(getConfig().getConfigurationSection("ranks.").getKeys(false));
     }
 }

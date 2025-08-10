@@ -19,17 +19,7 @@ public class StatsAdminCommand implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
 
         if (strings.length < 1) {
-            commandSender.sendMessage("§4No subcommand provided!");
-            return true;
-        }
-
-        if (strings[0].equals("reload")) {
-            try {
-                plugin.getConfig().load(plugin.getResource("config.yml"));
-                commandSender.sendMessage("§aStatistics configuration reloaded!");
-            } catch (IOException | InvalidConfigurationException e) {
-                throw new RuntimeException(e);
-            }
+            return false;
         }
 
         commandSender.sendMessage("§4Unrecognized subcommand!");

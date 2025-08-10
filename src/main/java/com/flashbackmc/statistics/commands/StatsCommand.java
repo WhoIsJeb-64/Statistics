@@ -26,8 +26,12 @@ public class StatsCommand implements CommandExecutor {
             Bukkit.getLogger().info("A player must be specified if command is run from console!");
             return true;
         }
-
         Player player = commandSender.getServer().getPlayer(commandSender.getName());
+        if (!player.hasPermission("statistics.stats")) {
+            player.sendMessage(command.getPermissionMessage());
+            return true;
+        }
+
         UUID uuid = player.getUniqueId();
         sPlayer sPlayer = playerMap.get(uuid);
         sPlayer.updatePlaytime();

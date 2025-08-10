@@ -131,8 +131,11 @@ public class sPlayer {
                 rankNum++;
             }
         }
-        this.group = plugin.getRanks().get(rankNum);
-        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "manuadd " + this.name + " " + this.group);
+        if (plugin.getRanks().contains(this.group) && !this.group.equals(plugin.getRanks().get(rankNum - 1))) {
+            this.group = plugin.getRanks().get(rankNum - 1);
+            Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex user " + this.name + " group set " + this.group);
+            Bukkit.getServer().broadcastMessage("§2»§a " + this.name + " §ahas been promoted to§2 " + this.group + "§a!");
+        }
     }
 
     public String formattedPlaytime() {
