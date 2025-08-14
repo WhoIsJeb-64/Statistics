@@ -2,10 +2,7 @@ package com.flashbackmc.statistics;
 
 import com.flashbackmc.statistics.commands.*;
 import com.flashbackmc.statistics.listeners.*;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import java.io.File;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -49,6 +46,7 @@ public class Statistics extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BlockBreakPlace(getLogger(), this), this);
         getServer().getPluginManager().registerEvents(new PlayerDeath(getLogger(), this), this);
         getServer().getPluginManager().registerEvents(new ExpChange(getLogger(), this), this);
+        getServer().getPluginManager().registerEvents(new AfkStatusChange(getLogger(), this), this);
     }
 
     private void initRanks() {

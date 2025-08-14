@@ -30,37 +30,40 @@ public class PlayerJoinQuitEtc implements Listener {
     public void onPlayerJoin(final PlayerJoinEvent event) throws IOException {
         UUID uuid = event.getPlayer().getUniqueId();
         if (!playerMap.containsKey(uuid)) {
-            File datafile = new File(plugin.getDataFolder().toString() + "/userdata/" + uuid.toString() + ".yml");
-            if (datafile.exists()) {
-                InputStream inputStream = Files.newInputStream(Paths.get(datafile.getPath()));
+            File f = new File(plugin.getDataFolder().toString() + "/userdata/" + uuid.toString() + ".yml");
+            if (f.exists()) {
+                InputStream inputStream = Files.newInputStream(Paths.get(f.getPath()));
                 Yaml yaml = new Yaml();
                 Map<String, Object> data = (Map<String, Object>) yaml.load(inputStream);
-                sPlayer sPlayer = new sPlayer(uuid, data, plugin);
-                playerMap.put(uuid, sPlayer);
+                sPlayer sp = new sPlayer(uuid, data, plugin);
+                playerMap.put(uuid, sp);
             } else {
-                sPlayer sPlayer = new sPlayer(uuid, event.getPlayer().getName(), plugin);
-                playerMap.put(uuid, sPlayer);
+                sPlayer sp = new sPlayer(uuid, event.getPlayer().getName(), plugin);
+                playerMap.put(uuid, sp);
             }
+        } else {
+            sPlayer sp = playerMap.get(uuid);
+            sp.startSession();
         }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerQuit(final PlayerQuitEvent event) throws IOException {
         UUID uuid = event.getPlayer().getUniqueId();
-        sPlayer sPlayer = playerMap.get(uuid);
-        sPlayer.updatePlaytime();
-        sPlayer.updateRank();
+        sPlayer sp = playerMap.get(uuid);
+        sp.updatePlaytime();
+        sp.updateRank();
 
-        sPlayer.save(plugin);
+        sp.save(plugin);
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerKick(final PlayerKickEvent event) throws IOException {
         UUID uuid = event.getPlayer().getUniqueId();
-        sPlayer sPlayer = playerMap.get(uuid);
-        sPlayer.updatePlaytime();
-        sPlayer.updateRank();
+        sPlayer sp = playerMap.get(uuid);
+        sp.updatePlaytime();
+        sp.updateRank();
 
-        sPlayer.save(plugin);
+        sp.save(plugin);
     }
 }

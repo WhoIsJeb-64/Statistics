@@ -24,14 +24,14 @@ public class BlockBreakPlace implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockBreak(final BlockBreakEvent event) {
         UUID uuid = event.getPlayer().getUniqueId();
-        sPlayer sPlayer = playerMap.get(uuid);
-        sPlayer.increaseBlocksBroken();
+        sPlayer sp = playerMap.get(uuid);
+        sp.increaseBlocksBroken();
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockPlace(final BlockPlaceEvent event) {
         UUID uuid = event.getPlayer().getUniqueId();
-        sPlayer sPlayer = playerMap.get(uuid);
-        sPlayer.increaseBlocksPlaced();
+        sPlayer sp = playerMap.get(uuid);
+        sp.increaseBlocksPlaced();
     }
 }

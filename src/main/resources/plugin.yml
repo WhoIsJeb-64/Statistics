@@ -3,6 +3,7 @@ main: com.flashbackmc.statistics.Statistics
 author: WhoIsJeb
 version: 1.0-SNAPSHOT
 api-version: 1.8.8-R0.1-SNAPSHOT
+depend: [Essentials]
 commands:
   stats:
     description: Lists the stats of the specified player.

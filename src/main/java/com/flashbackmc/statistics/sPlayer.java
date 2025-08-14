@@ -3,8 +3,12 @@ package com.flashbackmc.statistics;
 import org.bukkit.Bukkit;
 import org.yaml.snakeyaml.Yaml;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.*;
+
+import static com.flashbackmc.statistics.Statistics.playerMap;
 
 public class sPlayer {
     private Statistics plugin;
@@ -122,6 +126,12 @@ public class sPlayer {
         this.sessionLength = System.currentTimeMillis() - this.sessionStart;
         this.playtime = this.playtime + this.sessionLength;
         this.sessionStart = System.currentTimeMillis();
+        this.sessionLength = 0;
+    }
+
+    public void startSession() {
+        this.sessionStart = System.currentTimeMillis();
+        this.sessionLength = 0;
     }
 
     public void updateRank() {
