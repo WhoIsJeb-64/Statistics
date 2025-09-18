@@ -1,14 +1,12 @@
-package com.flashbackmc.statistics;
+package com.flashbackmc.statistics.data;
 
+import com.flashbackmc.statistics.Statistics;
 import org.bukkit.Bukkit;
+import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.*;
-
-import static com.flashbackmc.statistics.Statistics.playerMap;
 
 public class sPlayer {
     private Statistics plugin;
@@ -30,7 +28,7 @@ public class sPlayer {
         this.plugin = plugin;
         this.uuid = uuid;
         this.name = name;
-        this.group = "Silver";
+        this.group = plugin.getConfig().getString("settings.defaultGroup");
 
         this.playtime = 0;
         this.blocksBroken = 0;
@@ -63,22 +61,12 @@ public class sPlayer {
         this.sessionLength = 0;
     }
 
-    public abstract static class Statistic {
-        abstract void get();
-        abstract void increase();
-        abstract void format();
-    }
-
     public UUID getUuid() {
         return this.uuid;
     }
 
     public String getName() {
         return this.name;
-    }
-
-    public String getGroup() {
-        return this.group;
     }
 
     public int getBlocksBroken() {
@@ -136,12 +124,21 @@ public class sPlayer {
 
     public void updateRank() {
         int rankNum = 0;
-        for (Long value : plugin.getRankLadder().values()) {
-            if (this.playtime > value) {
+
+        for (Group group : plugin.getGroups()) {
+            int requiredHours = group.getRequiredHours();
+            int requiredXp = group.getRequiredXp();
+            if (this.playtime / 3600000 >= requiredHours) {
+                continue;
+            }
+            if (this.xpGained >= requiredXp) {
                 rankNum++;
             }
         }
-        if (plugin.getRanks().contains(this.group) && !this.group.equals(plugin.getRanks().get(rankNum - 1))) {
+        if (!plugin.getRanks().contains(this.group)) {
+            return;
+        }
+        if (!this.group.equals(plugin.getRanks().get(rankNum - 1))) {
             this.group = plugin.getRanks().get(rankNum - 1);
             Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex user " + this.name + " group set " + this.group);
             Bukkit.getServer().broadcastMessage("§2»§a " + this.name + " §ahas been promoted to§2 " + this.group + "§a!");
@@ -155,7 +152,7 @@ public class sPlayer {
         long hours = (this.playtime / (1000 * 60 * 60)) % 24;
         long days = (this.playtime / (1000 * 60 * 60 * 24));
 
-        //Seconds stop being displayed to players who have over 1 day of playtime
+        //Before 1d of playtime, it's XXh XXm XXs; afterwards it's XXd XXh XXm
         if (this.playtime >= 86400000) {
             return String.format("%01dd %02dh %02dm", days, hours, minutes);
         }
@@ -177,7 +174,12 @@ public class sPlayer {
         File datafile = new File(plugin.getDataFolder().toString() + "/userdata/" + this.getUuid().toString() + ".yml");
         datafile.getParentFile().mkdirs();
         PrintWriter writer = new PrintWriter(datafile);
-        Yaml yaml = new Yaml();
+
+        DumperOptions options = new DumperOptions();
+        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+        options.setIndent(2);
+
+        Yaml yaml = new Yaml(options);
         yaml.dump(data, writer);
         writer.close();
     }

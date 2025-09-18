@@ -1,6 +1,7 @@
 package com.flashbackmc.statistics;
 
 import com.flashbackmc.statistics.commands.*;
+import com.flashbackmc.statistics.data.*;
 import com.flashbackmc.statistics.listeners.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.*;
@@ -10,7 +11,7 @@ public class Statistics extends JavaPlugin {
     private JavaPlugin plugin;
     private Logger log;
     public static HashMap<UUID, sPlayer> playerMap;
-    private LinkedHashMap<String, Long> rankLadder;
+    private LinkedHashMap<String, Group> groups;
 
     @Override
     public void onEnable() {
@@ -20,8 +21,8 @@ public class Statistics extends JavaPlugin {
         setupConfig();
 
         playerMap = new HashMap<>();
-        rankLadder = new LinkedHashMap<>();
-        initRanks();
+        groups = new LinkedHashMap<>();
+        loadRanks();
 
         registerListeners();
         getCommand("stats").setExecutor(new StatsCommand(this));
@@ -49,17 +50,20 @@ public class Statistics extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new AfkStatusChange(getLogger(), this), this);
     }
 
-    private void initRanks() {
-        for (String rank : getConfig().getConfigurationSection("ranks.").getKeys(false)) {
-            rankLadder.put(rank, (getConfig().getLong("ranks." + rank) * 3600000));
+    private void loadRanks() {
+        for (String groupName : getConfig().getConfigurationSection("groupLadders.").getKeys(false)) {
+            int requiredHours = getConfig().getInt("groups." + groupName + ".requiredHours");
+            int requiredXp = getConfig().getInt("groups." + groupName + ".requiredXp");
+            Group group = new Group(groupName, requiredHours, requiredXp);
+            groups.put(groupName, group);
         }
     }
 
-    public LinkedHashMap<String, Long> getRankLadder() {
-        return rankLadder;
+    public ArrayList<Group> getGroups() {
+        return new ArrayList<>((Collection<Group>) groups);
     }
 
     public ArrayList<String> getRanks() {
-        return new ArrayList<>(getConfig().getConfigurationSection("ranks.").getKeys(false));
+        return new ArrayList<>(getConfig().getConfigurationSection("groups.").getKeys(false));
     }
 }

@@ -2,12 +2,25 @@
 #        Statistics Configuration        #
 ##########################################
 
+settings:
+  defaultGroup: Silver
 
-# Format: Exact-Groupname: Hours of playtime required
-ranks:
-  Silver: 0
-  Topaz: 15
-  Sapphire: 40
-  Amethyst: 100
-  Emerald: 300
-  Diamond: 600
+groups:
+  Silver:
+    requiredHours: 0
+    requiredXp: 0
+  Topaz:
+    requiredHours: 15
+    requiredXp: 0
+  Sapphire:
+    requiredHours: 40
+    requiredXp: 0
+  Ruby:
+    requiredHours: 100
+    requiredXp: 0
+  Emerald:
+    requiredHours: 300
+    requiredXp: 0
+  Diamond:
+    requiredHours: 100
+    requiredXp: 0
