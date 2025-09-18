@@ -1,7 +1,7 @@
 package com.flashbackmc.statistics.commands;
 
 import com.flashbackmc.statistics.Statistics;
-import com.flashbackmc.statistics.sPlayer;
+import com.flashbackmc.statistics.data.sPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

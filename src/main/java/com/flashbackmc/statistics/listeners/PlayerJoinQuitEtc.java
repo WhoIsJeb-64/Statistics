@@ -1,6 +1,6 @@
 package com.flashbackmc.statistics.listeners;
 
-import com.flashbackmc.statistics.sPlayer;
+import com.flashbackmc.statistics.data.sPlayer;
 import com.flashbackmc.statistics.Statistics;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

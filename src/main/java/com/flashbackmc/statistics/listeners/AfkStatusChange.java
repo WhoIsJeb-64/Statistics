@@ -1,7 +1,7 @@
 package com.flashbackmc.statistics.listeners;
 
 import com.flashbackmc.statistics.Statistics;
-import com.flashbackmc.statistics.sPlayer;
+import com.flashbackmc.statistics.data.sPlayer;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
