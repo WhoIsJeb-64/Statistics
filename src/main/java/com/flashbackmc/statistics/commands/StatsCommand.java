@@ -39,17 +39,7 @@ public class StatsCommand implements CommandExecutor {
             return true;
         }
 
-        sPlayer sp;
-        if (strings[0] != null) {
-            try {
-                sp = loadPlayer(strings[0]);
-            } catch (IOException e) {
-                commandSender.sendMessage("§4» §cSpecified player does not exist!");
-                throw new RuntimeException(e);
-            }
-        } else {
-            sp = playerMap.get(p.getUniqueId());
-        }
+        sPlayer sp = playerMap.get(p.getUniqueId());
         if (sp == null) {
             commandSender.sendMessage("§4sp == null");
             return true;
@@ -57,6 +47,7 @@ public class StatsCommand implements CommandExecutor {
         sp.updatePlaytime();
         sp.updateRank();
 
+        commandSender.sendMessage("=========== §6" + sp.getName() + "§6's Statistics: §f===========");
         commandSender.sendMessage("» §7Playtime:§c " + sp.formattedPlaytime());
         commandSender.sendMessage("» §7Blocks broken/placed:§e " + sp.decFormat(sp.getBlocksBroken()) + " §7/§e " + sp.decFormat(sp.getBlocksPlaced()));
         commandSender.sendMessage("» §7Exp gained:§a " + sp.decFormat(sp.getXpGained()));

@@ -29,7 +29,7 @@ public class Statistics extends JavaPlugin {
         getCommand("statsadmin").setExecutor(new StatsAdminCommand(this));
 
         log.info("Statistics has loaded!");
-        log.info("Ranks: " + getRanks());
+        log.info("Ranks: " + getGroupNames());
     }
 
     @Override
@@ -51,7 +51,7 @@ public class Statistics extends JavaPlugin {
     }
 
     private void loadRanks() {
-        for (String groupName : getConfig().getConfigurationSection("groupLadders.").getKeys(false)) {
+        for (String groupName : getConfig().getConfigurationSection("groups.").getKeys(false)) {
             int requiredHours = getConfig().getInt("groups." + groupName + ".requiredHours");
             int requiredXp = getConfig().getInt("groups." + groupName + ".requiredXp");
             Group group = new Group(groupName, requiredHours, requiredXp);
@@ -60,10 +60,10 @@ public class Statistics extends JavaPlugin {
     }
 
     public ArrayList<Group> getGroups() {
-        return new ArrayList<>((Collection<Group>) groups);
+        return new ArrayList<>(groups.values());
     }
 
-    public ArrayList<String> getRanks() {
+    public ArrayList<String> getGroupNames() {
         return new ArrayList<>(getConfig().getConfigurationSection("groups.").getKeys(false));
     }
 }

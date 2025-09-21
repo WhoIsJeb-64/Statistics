@@ -129,32 +129,34 @@ public class sPlayer {
             int requiredHours = group.getRequiredHours();
             int requiredXp = group.getRequiredXp();
             if (this.playtime / 3600000 >= requiredHours) {
-                continue;
+                //
+            } else {
+                break;
             }
             if (this.xpGained >= requiredXp) {
                 rankNum++;
             }
         }
-        if (!plugin.getRanks().contains(this.group)) {
+        if (!plugin.getGroupNames().contains(this.group)) {
             return;
         }
-        if (!this.group.equals(plugin.getRanks().get(rankNum - 1))) {
-            this.group = plugin.getRanks().get(rankNum - 1);
+        if (!this.group.equals(plugin.getGroupNames().get(rankNum - 1))) {
+            this.group = plugin.getGroupNames().get(rankNum - 1);
             Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex user " + this.name + " group set " + this.group);
-            Bukkit.getServer().broadcastMessage("§2»§a " + this.name + " §ahas been promoted to§2 " + this.group + "§a!");
+            String promotionBroadcast = plugin.getConfig().getString("groups." + this.group + ".promotionBroadcast");
+            promotionBroadcast = promotionBroadcast.replaceAll("&", "§");
+            Bukkit.getServer().broadcastMessage(promotionBroadcast.replace("%player%", this.name));
         }
     }
 
     public String formattedPlaytime() {
-        //Each of the next 4 lines determines how many of the unit remain after as many of the next are taken out.
+        //Each of the next 3 lines determines how many of the unit remain after as many of the next are taken out.
         long seconds = (this.playtime / 1000) % 60;
         long minutes = (this.playtime / (1000 * 60)) % 60;
-        long hours = (this.playtime / (1000 * 60 * 60)) % 24;
-        long days = (this.playtime / (1000 * 60 * 60 * 24));
+        long hours = (this.playtime / (1000 * 60 * 60));
 
-        //Before 1d of playtime, it's XXh XXm XXs; afterwards it's XXd XXh XXm
         if (this.playtime >= 86400000) {
-            return String.format("%01dd %02dh %02dm", days, hours, minutes);
+            return String.format("%02dh %02dm", hours, minutes);
         }
         return String.format("%02dh %02dm %02ds", hours, minutes, seconds);
     }

@@ -12,15 +12,20 @@ groups:
   Topaz:
     requiredHours: 15
     requiredXp: 0
+    promotionBroadcast: '&6» &7%player% has been promoted to &6Topaz&7!'
   Sapphire:
     requiredHours: 40
     requiredXp: 0
+    promotionBroadcast: '&9» &7%player% has been promoted to &9Sapphire&7!'
   Ruby:
     requiredHours: 100
     requiredXp: 0
+    promotionBroadcast: '&4» &7%player% has been promoted to &cRuby&7!'
   Emerald:
     requiredHours: 300
     requiredXp: 0
+    promotionBroadcast: '&2» &7%player% has been promoted to &aEmerald&7!'
   Diamond:
-    requiredHours: 100
+    requiredHours: 600
     requiredXp: 0
+    promotionBroadcast: '&3» &7%player% has been promoted to &bDiamond&7!'
